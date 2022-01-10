@@ -1,3 +1,5 @@
+import csv
+
 class Tarefa:
     def __init__(self, titulo, data, status_tarefa):
         self.titulo = titulo
@@ -7,6 +9,7 @@ class Tarefa:
     def __repr__(self):
         return f'{[self.titulo, self.data, self.status_tarefa]}'
 
-tarefa1 = Tarefa('tarefa1', '01/01/22', 'pendente')
-print(tarefa1)
-
+    def adicionar_tarefa(self):
+        with open('tarefas.csv', 'a') as tarefas:
+            note = csv.writer(tarefas, delimiter=';' , lineterminator = '\n')
+            note.writerow([self.titulo, self.data, self.status_tarefa])
