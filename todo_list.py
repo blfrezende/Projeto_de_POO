@@ -47,15 +47,23 @@ class Lista_de_tarefas:
             remove = csv.writer(tarefas, delimiter=';', lineterminator='\n')
             remove.writerows(conteudo_tabela)
 
-        
+    def vizualizar_tarefas():
+        with open('tarefinha.csv') as tarefas:
+            tabela_tarefas = csv.reader(tarefas, delimiter=';', lineterminator='\n')
+            conteudo_tabela = list(tabela_tarefas)
+        print('TAREFAS:')
+        print('[Título, Data, Categoria, Status]')
+        for tarefa in conteudo_tabela:
+            print(tarefa)    
 
 
 
 
-# tarefa1 = Lista_de_tarefas(titulo='pescar', categoria= 'lazer')
-# tarefa1.adicionar_tarefa()
+#tarefa1 = Lista_de_tarefas(titulo='pescar', data = '09/02/22', categoria= 'lazer')
+#tarefa1.adicionar_tarefa()
 # tarefa1.alterar_status()
-# tarefa1.remover_tarefa()
+#tarefa1.remover_tarefa()
+#Lista_de_tarefas.vizualizar_tarefas()
 
 
 # data = datetime.now()
