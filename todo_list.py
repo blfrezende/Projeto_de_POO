@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime, date
+import inquirer
 
 class Lista_de_tarefas:
     def __init__(self, titulo, data, categoria):
@@ -57,7 +58,19 @@ class Lista_de_tarefas:
             print(tarefa)    
 
 
-
+questions = [
+    inquirer.List('option',
+      message = 'Escolha uma das opções abaixo',
+      choices = [
+            'Adicionar tarefa',
+            'Alterar status da tarefa',
+            'Remover tarefa',
+            'Vizualizar tarefas',
+            'Encerrar'
+      ]         
+    )
+  ]
+answers = inquirer.prompt(questions)
 
 #tarefa1 = Lista_de_tarefas(titulo='pescar', data = '09/02/22', categoria= 'lazer')
 #tarefa1.adicionar_tarefa()
