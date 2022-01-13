@@ -1,6 +1,7 @@
 import csv
 from datetime import datetime, date
 import inquirer
+import pandas as pd
 
 class Lista_de_tarefas:
     def __init__(self, titulo, data, categoria):
@@ -26,21 +27,33 @@ class Lista_de_tarefas:
             if linha[0] == self.titulo:
                 if linha[3] == 'Pendente':
                     linha[3] = 'Concluida'
+                    print('\n--------------------------------------------------------')
+                    print(f' Status da tarefa \'{linha[0]}\' foi alterado para {linha[3]}. ')
+                    print('--------------------------------------------------------\n')
                 else:
                   linha[3] = 'Pendente'
-                
+                  print('\n--------------------------------------------------------')
+                  print(f' Status da tarefa \'{linha[0]}\' foi alterado para {linha[3]}. ')
+                  print('--------------------------------------------------------\n')
+
         with open('tarefas.csv', 'w') as tarefas:
             altera = csv.writer(tarefas, delimiter=';', lineterminator='\n')
             altera.writerows(conteudo_tabela)
+            
 
     def remover_tarefa(self):
         with open('tarefas.csv') as tarefas:
             tabela_tarefas = csv.reader(tarefas, delimiter=';', lineterminator = '\n')
             conteudo_tabela = list(tabela_tarefas)
-            lista_tarefa = [self.titulo,self.data,self.categoria,self.status_tarefa]
-            
-            indice = conteudo_tabela.index(lista_tarefa)
+        
+        for linha in conteudo_tabela:
+          if linha[0] == self.titulo:
+            indice = conteudo_tabela.index(linha)
             conteudo_tabela.pop(indice)
+            print('\n--------------------------------------------------------')
+            print('     Tarefa ', linha[0] , ' removida com sucesso!!        ')
+            print('--------------------------------------------------------\n')
+
 
         
         with open('tarefas.csv','w') as tarefas:
@@ -48,13 +61,18 @@ class Lista_de_tarefas:
             remove.writerows(conteudo_tabela)
 
     def vizualizar_tarefas():
-        with open('tarefinha.csv') as tarefas:
+        with open('tarefas.csv') as tarefas:
             tabela_tarefas = csv.reader(tarefas, delimiter=';', lineterminator='\n')
             conteudo_tabela = list(tabela_tarefas)
-        print('TAREFAS:')
-        print('[Título, Data, Categoria, Status]')
+        dict_tarefas = {}
         for tarefa in conteudo_tabela:
-            print(tarefa)    
+          dict_tarefas[tarefa[0]] = [tarefa[1],tarefa[2],tarefa[3]]
+
+        df = pd.DataFrame(data=dict_tarefas.values(),index=dict_tarefas.keys(),columns = ['   Data','   Categoria','     Status'])
+        df.rename_axis('Tarefa', axis = 'columns', inplace = True)
+        print('\n---------------------------------------------------')
+        print(df)
+        print('---------------------------------------------------\n')
 
 while True:
   questions = [
@@ -98,14 +116,18 @@ while True:
       tarefa.adicionar_tarefa()
 
   elif answers['option'] == 'Alterar status da tarefa':
+    with open('tarefas.csv') as tarefas:
+      tabela_tarefas = csv.reader(tarefas, delimiter=';', lineterminator='\n')
+      conteudo_tabela = list(tabela_tarefas)
+
+    print('\n---------------------------------------------------')
+    print('         Essas são as tarefas da lista :                  ')
+    Lista_de_tarefas.vizualizar_tarefas()
+    
     questions3 = [
       inquirer.Text('titulo', message = 'Qual o título da tarefa que deseja alterar o status?')
     ]
     answers3 = inquirer.prompt(questions3)
-
-    with open('tarefas.csv') as tarefas:
-      tabela_tarefas = csv.reader(tarefas, delimiter=';', lineterminator='\n')
-      conteudo_tabela = list(tabela_tarefas)
 
     contador = 0
 
@@ -121,24 +143,31 @@ while True:
       print('--------------------------------------------------------\n')
 
 
-  # elif answers['option'] == 'Remover tarefa':
-  #   questions4 = [
-  #     inquirer.Text('titulo', message = 'Qual o título da tarefa que deseja remover?')
-  #   ]
-  #   answers4 = inquirer.prompt(questions4)
-  #   remover_tarefa(answers4['titulo'])
+  elif answers['option'] == 'Remover tarefa':
+    questions4 = [
+      inquirer.Text('titulo', message = 'Qual o título da tarefa que deseja remover?')
+    ]
+    answers4 = inquirer.prompt(questions4)
+    
+    with open('tarefas.csv') as tarefas:
+      tabela_tarefas = csv.reader(tarefas, delimiter=';', lineterminator='\n')
+      conteudo_tabela = list(tabela_tarefas)
 
-  # elif answers['option'] == 'Vizualizar tarefas':
-  #  vizualizar_tarefas()
+    contador = 0
+
+    for objeto in conteudo_tabela:
+        if answers4['titulo'] == objeto[0]:
+          tarefa = Lista_de_tarefas(objeto[0], objeto[1], objeto[2])
+          tarefa.remover_tarefa()
+          contador += 1
+
+    if contador == 0:
+      print('\n--------------------------------------------------------')
+      print(' Não existe tarefa com esse título. Tente novamente!!!')
+      print('--------------------------------------------------------\n')
+
+  elif answers['option'] == 'Vizualizar tarefas':
+    Lista_de_tarefas.vizualizar_tarefas()
 
   else:
     break
-#tarefa1 = Lista_de_tarefas(titulo='pescar', data = '09/02/22', categoria= 'lazer')
-#tarefa1.adicionar_tarefa()
-# tarefa1.alterar_status()
-#tarefa1.remover_tarefa()
-#Lista_de_tarefas.vizualizar_tarefas()
-
-
-# data = datetime.now()
-# datetime.strftime(data.now(), '%d/%m/%Y')
