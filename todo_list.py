@@ -18,10 +18,14 @@ class Lista_de_tarefas:
             note = csv.writer(tarefas, delimiter=';' , lineterminator = '\n')
             note.writerow([self.titulo, self.data, self.categoria, self.status_tarefa])
 
-    def alterar_status(self):
-        with open('tarefas.csv') as tarefas:
+    def ler_e_criar_lista():
+      with open('tarefas.csv') as tarefas:
             tabela_tarefas = csv.reader(tarefas, delimiter=';', lineterminator='\n')
             conteudo_tabela = list(tabela_tarefas)
+      return conteudo_tabela
+
+    def alterar_status(self):
+        conteudo_tabela = Lista_de_tarefas.ler_e_criar_lista()
             
         for linha in conteudo_tabela:
             if linha[0] == self.titulo:
@@ -42,9 +46,7 @@ class Lista_de_tarefas:
             
 
     def remover_tarefa(self):
-        with open('tarefas.csv') as tarefas:
-            tabela_tarefas = csv.reader(tarefas, delimiter=';', lineterminator = '\n')
-            conteudo_tabela = list(tabela_tarefas)
+        conteudo_tabela = Lista_de_tarefas.ler_e_criar_lista()
         
         for linha in conteudo_tabela:
           if linha[0] == self.titulo:
@@ -61,9 +63,8 @@ class Lista_de_tarefas:
             remove.writerows(conteudo_tabela)
 
     def vizualizar_tarefas():
-        with open('tarefas.csv') as tarefas:
-            tabela_tarefas = csv.reader(tarefas, delimiter=';', lineterminator='\n')
-            conteudo_tabela = list(tabela_tarefas)
+        conteudo_tabela = Lista_de_tarefas.ler_e_criar_lista()
+
         dict_tarefas = {}
         for tarefa in conteudo_tabela:
           dict_tarefas[tarefa[0]] = [tarefa[1],tarefa[2],tarefa[3]]
@@ -97,9 +98,7 @@ while True:
     ]
     answers2 = inquirer.prompt(questions2)
 
-    with open('tarefas.csv') as tarefas:
-      tabela_tarefas = csv.reader(tarefas, delimiter=';', lineterminator='\n')
-      conteudo_tabela = list(tabela_tarefas)
+    conteudo_tabela = Lista_de_tarefas.ler_e_criar_lista()
 
     objeto_titulo = 0
 
@@ -116,9 +115,7 @@ while True:
       tarefa.adicionar_tarefa()
 
   elif answers['option'] == 'Alterar status da tarefa':
-    with open('tarefas.csv') as tarefas:
-      tabela_tarefas = csv.reader(tarefas, delimiter=';', lineterminator='\n')
-      conteudo_tabela = list(tabela_tarefas)
+    conteudo_tabela = Lista_de_tarefas.ler_e_criar_lista()
 
     print('\n---------------------------------------------------')
     print('         Essas são as tarefas da lista :                  ')
@@ -149,9 +146,7 @@ while True:
     ]
     answers4 = inquirer.prompt(questions4)
     
-    with open('tarefas.csv') as tarefas:
-      tabela_tarefas = csv.reader(tarefas, delimiter=';', lineterminator='\n')
-      conteudo_tabela = list(tabela_tarefas)
+    conteudo_tabela = Lista_de_tarefas.ler_e_criar_lista()
 
     contador = 0
 
